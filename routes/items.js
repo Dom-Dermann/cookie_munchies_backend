@@ -34,7 +34,8 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', async(req, res) => {
     Item.findOneAndRemove({ _id: req.body.id})
-        .then()
+        .then((i) => res.send(i))
+        .catch( (err) => res.send(err));
 });
 
 
