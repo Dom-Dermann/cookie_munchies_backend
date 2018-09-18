@@ -33,7 +33,7 @@ router.put('/:id', (req, res) => {
 })
 
 router.delete('/:id', async(req, res) => {
-    Item.findOneAndRemove({ _id: req.body.id})
+    Item.findByIdAndRemove(req.params.id)
         .then((i) => res.send(i))
         .catch( (err) => res.send(err));
 });
