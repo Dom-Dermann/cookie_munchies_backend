@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const Joi = require('joi');
 const { Item, validate } = require('../models/item');
 const _ = require('lodash');
 

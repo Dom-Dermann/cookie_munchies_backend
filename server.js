@@ -2,9 +2,14 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const config = require('config');
-const path = require('path');
+const cors = require('cors');
+
 
 const port = process.env.PORT || 3223;
+
+// MW
+app.use(express.json());
+app.use(cors());
 
 // connect to mongodb
 mongoose.connect(config.get('db.host'))
@@ -13,12 +18,6 @@ mongoose.connect(config.get('db.host'))
 
 // routes
 const items = require('./routes/items');
-
-// point static folder to the angular 'dist' folder
-// app.use(express.static(path.join(__dirname, 'dist')));
-
-// Body Parser MW
-app.use(express.json());
 
 // routing
 app.use('/api/items', items);
