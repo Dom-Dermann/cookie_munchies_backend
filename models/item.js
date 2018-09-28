@@ -14,9 +14,9 @@ const Item = mongoose.model('Item', new mongoose.Schema({
         default: false
     },
     storePosition: {
-        type: String, 
-        enum: ['beginning', 'middle', 'end'],
-        default: 'middle'
+        type: Number, 
+        enum: [1, 2, 3],
+        default: 2
     },
     dateStarted : {
         type: Date, 
@@ -30,7 +30,7 @@ function validate(body) {
     const schema = {
         name: Joi.string().required(),
         isDone: Joi.boolean(),
-        storePosition: Joi.string()
+        storePosition: Joi.number()
     }
     return Joi.validate(body, schema);
 }
