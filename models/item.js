@@ -15,7 +15,8 @@ const Item = mongoose.model('Item', new mongoose.Schema({
     },
     storePosition: {
         type: String, 
-        enum: ['beginning', 'middle', 'end']
+        enum: ['beginning', 'middle', 'end'],
+        default: 'middle'
     },
     dateStarted : {
         type: Date, 
