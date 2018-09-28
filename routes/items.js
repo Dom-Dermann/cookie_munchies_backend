@@ -9,9 +9,18 @@ router.post('/', async (req, res) => {
     const result = validate(req.body);
     if (result.error) return res.send(result.error.details[0].message);
 
-    const item = new Item({
-        name : req.body.name
+    let item = new Item({
+        name: req.body.name
     });
+
+    if(req.body.storePosition) {
+        item.storePosition = req.body.storePosition;
+    }
+
+    if(req.body.isDone) {
+        item.isDone = req.body.isDone;
+    }
+
     await item.save()
         .then( (i) => res.send(i))
         .catch( (err) => res.send(err));
