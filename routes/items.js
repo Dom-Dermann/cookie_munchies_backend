@@ -30,7 +30,7 @@ router.post('/', position_converter, async (req, res) => {
 
 router.get('/', async(req, res) => {
     Item.find()
-        .sort()
+        .sort({storePosition: 1})
         .then( (i) => res.send(i))
         .catch( (err) => res.send(err));
 });
