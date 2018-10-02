@@ -35,7 +35,7 @@ router.get('/', async(req, res) => {
         .catch( (err) => res.send(err));
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', position_converter, (req, res) => {
 
     Item.findByIdAndUpdate(req.params.id, {$set: req.body}, (err, i) => {
         if (err) return res.send(err);
