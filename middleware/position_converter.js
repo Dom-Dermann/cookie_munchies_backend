@@ -7,7 +7,10 @@ const pos_converter = function (req, res, next) {
     const schema = {
         name: Joi.string().required(),
         isDone: Joi.boolean(),
-        storePosition : Joi.string().valid(['beginning', 'middle', 'end'])
+        storePosition : Joi.string().valid(['beginning', 'middle', 'end']), 
+        _id: Joi.allow(),
+        dateStarted: Joi.allow(),
+        __v: Joi.allow()
     }
 
     const result = Joi.validate(req.body, schema)
