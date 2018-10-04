@@ -13,7 +13,7 @@ app.use(cors());
 
 // connect to mongodb
 mongoose.connect(config.get('db.host'))
-    .then(()=> {console.log('Connected to MongoDB on mLab.')})
+    .then(()=> {console.log(`Connected to MongoDB on at ${config.get('db.host')}.`)})
     .catch((err) => {console.log(err)});
 
 // routes

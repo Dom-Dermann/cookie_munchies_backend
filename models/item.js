@@ -21,7 +21,11 @@ const Item = mongoose.model('Item', new mongoose.Schema({
     dateStarted : {
         type: Date, 
         required: false,
-        default: Date.now
+        default: Date.now()
+    },
+    dateModified: {
+        type: Date, 
+        required: false
     }
 }));
 
@@ -30,7 +34,8 @@ function validate(body) {
     const schema = {
         name: Joi.string().required(),
         isDone: Joi.boolean(),
-        storePosition: Joi.number()
+        storePosition: Joi.number(),
+        dateModified: Joi.allow()
     }
     return Joi.validate(body, schema);
 }

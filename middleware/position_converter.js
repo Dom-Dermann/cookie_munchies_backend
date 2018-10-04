@@ -5,12 +5,13 @@ const Joi = require('joi');
 
 const pos_converter = function (req, res, next) {
     const schema = {
-        name: Joi.string().required(),
+        name: Joi.string(),
         isDone: Joi.boolean(),
         storePosition : Joi.string().valid(['beginning', 'middle', 'end']), 
         _id: Joi.allow(),
         dateStarted: Joi.allow(),
-        __v: Joi.allow()
+        __v: Joi.allow(),
+        dateModified: Joi.allow()   
     }
 
     const result = Joi.validate(req.body, schema)

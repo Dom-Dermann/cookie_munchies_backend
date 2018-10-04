@@ -1,5 +1,5 @@
 {
     "db": {
-        "host": "mongodb://DomDom:Dom123@ds251332.mlab.com:51332/tasklistdb"
+        "host": "mongodb://localhost:27017/tasklistdb"
     }
 }
