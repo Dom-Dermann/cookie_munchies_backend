@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const config = require('config');
 const cors = require('cors');
 
-
 const port = process.env.PORT || 3223;
 
 // MW
@@ -18,8 +17,10 @@ mongoose.connect(config.get('db.host'))
 
 // routes
 const items = require('./routes/items');
+const recipes = require('./routes/recipes');
 
 // routing
 app.use('/api/items', items);
+app.use('/api/recipes', recipes);
 
 app.listen(port, () => { console.log('SERVER IS RUNNING.')});
