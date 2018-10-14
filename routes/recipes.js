@@ -15,8 +15,8 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
     await Recipe.find()
-        .then( (r) => res.status(404).send(r))
-        .catch( (err) => res.send(err));
+        .then( (r) => res.send(r))
+        .catch( (err) => res.status(404).send(err));
 });
 
 router.delete('/:id', async (req, res) => {
