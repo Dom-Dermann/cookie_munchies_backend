@@ -10,13 +10,20 @@ router.post('/', async (req, res) => {
 
     await recipe.save()
         .then( (r) => res.send(r))
-        .catch( (err) => res.send(err));
+        .catch( (err) => res.status(404).send(err));
 });
 
 router.get('/', async (req, res) => {
     await Recipe.find()
-        .then( (r) => res.send(r))
+        .then( (r) => res.status(404).send(r))
         .catch( (err) => res.send(err));
-})
+});
+
+router.delete('/:id', async (req, res) => {
+    await Recipe.findByIdAndRemove(req.params.id, (err, rec) => {
+        if (err) return res.status(404).send(err);
+        res.send(rec);
+    })
+});
 
 module.exports = router;
