@@ -18,9 +18,11 @@ mongoose.connect(config.get('db.host'))
 // routes
 const items = require('./routes/items');
 const recipes = require('./routes/recipes');
+const users = require('./routes/users');
 
 // routing
 app.use('/api/items', items);
 app.use('/api/recipes', recipes);
+app.use('/api/users', users);
 
 app.listen(port, () => { console.log('SERVER IS RUNNING.')});
