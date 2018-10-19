@@ -1,10 +1,15 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const config = require('config');
 const cors = require('cors');
+const config = require('config');
 
 const port = process.env.PORT || 3223;
+
+if(!config.get('jwtPrivateKey')) {
+    console.log('FATAL ERROR: jwtPrivateKey is not defined.');
+    process.exit(1);
+}
 
 // MW
 app.use(express.json());
@@ -19,10 +24,12 @@ mongoose.connect(config.get('db.host'))
 const items = require('./routes/items');
 const recipes = require('./routes/recipes');
 const users = require('./routes/users');
+const auth = require('./routes/auth')
 
 // routing
 app.use('/api/items', items);
 app.use('/api/recipes', recipes);
 app.use('/api/users', users);
+app.use('/api/auth', auth);
 
 app.listen(port, () => { console.log('SERVER IS RUNNING.')});
