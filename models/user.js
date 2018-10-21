@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
 const PasswordComplexity = require('joi-password-complexity');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 
-const User = mongoose.model('Users', new mongoose.Schema( {
+const userSchema = new mongoose.Schema( {
     name: {
         type: String, 
         required: true,
@@ -22,7 +24,20 @@ const User = mongoose.model('Users', new mongoose.Schema( {
         minlength: 1, 
         maxlength: 1024
     }
-}));
+});
+
+// Information Expert Principle: the object with all the information - user in this case - 
+// should be the object that generates the token
+// below function referenes the user with 'this'
+userSchema.methods.generateAuthToken = function() {
+    const token = jwt.sign({
+        _id: this._id,
+        name: this.name
+    }, config.get('jwtPrivateKey'));
+    return token;
+}
+
+const User = mongoose.model('Users', userSchema);
 
 function validateUser(user) {
     const schema = {

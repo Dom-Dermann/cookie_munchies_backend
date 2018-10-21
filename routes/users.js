@@ -25,7 +25,10 @@ router.post('/', async(req, res) => {
 
     await user.save();
 
-    res.send(_.pick(user, ['_id', 'name', 'email']));
+    // sign and send token as part of the header
+    // there is no email checking here for now. Once the user registers they get a valid jwt token and can keep browsing
+    const token = user.generateAuthToken();
+    res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
 });
 
 module.exports = router;
