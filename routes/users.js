@@ -2,7 +2,7 @@ const {User, validateUser, validatePassword}= require('../models/user');
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const auth = require('../middleware/auth');
 
 router.get('/me', auth, async (req, res) => {

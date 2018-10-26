@@ -2,10 +2,8 @@ const {User}= require('../models/user');
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const Joi = require('joi');
-const jwt = require('jsonwebtoken');
-const config = require('config');
 
 router.post('/', async(req, res) => {
     // validate input
