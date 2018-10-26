@@ -20,7 +20,10 @@ router.post('/', async(req, res) => {
 
     // if all is correct, send jwt
     const token = user.generateAuthToken();
-    res.send(token);
+    res.status(200).json( {
+        jwt: token,
+        expiresIn: 2
+    })
 });
 
 function validateUser(user) {
