@@ -7,7 +7,6 @@ const auto_delete = require('../middleware/auto_delete');
 const auth = require('../middleware/auth');
 
 router.post('/', [auth, position_converter], async (req, res) => {
-
     // validate req body
     const result = validate(req.body);
     if (result.error) return res.send(result.error.details[0].message);
