@@ -66,5 +66,6 @@ function validatePassword(password) {
 }
 
 module.exports.User = User;
+module.exports.userSchema = userSchema;
 module.exports.validateUser = validateUser;
 module.exports.validatePassword = validatePassword;

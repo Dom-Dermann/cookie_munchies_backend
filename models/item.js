@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
 
-const Item = mongoose.model('Item', new mongoose.Schema({
+const itemSchema = new mongoose.Schema({
     name : {
         type: String,
         required: true,
@@ -27,18 +27,18 @@ const Item = mongoose.model('Item', new mongoose.Schema({
         type: Date, 
         required: false
     }
-}));
+});
 
-// validate item
 function validate(body) {
     const schema = {
         name: Joi.string().required(),
         isDone: Joi.boolean(),
-        storePosition: Joi.number(),
-        dateModified: Joi.allow()
+        storePosition: Joi.number()
     }
+
     return Joi.validate(body, schema);
 }
 
-module.exports.Item = Item;
+
+module.exports.itemSchema = itemSchema;
 module.exports.validate = validate;

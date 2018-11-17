@@ -1,19 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const { Item, validate } = require('../models/item');
+const { itemSchema, validate } = require('../models/item');
 const _ = require('lodash');
 const position_converter = require('../middleware/position_converter');
 const auto_delete = require('../middleware/auto_delete');
 const auth = require('../middleware/auth');
+const List = require('../models/list');
 
-router.post('/', [auth, position_converter], async (req, res) => {
+router.post('/:listid', [auth, position_converter], async (req, res) => {
     // validate req body
     const result = validate(req.body);
     if (result.error) return res.send(result.error.details[0].message);
 
-    let item = new Item({
+    // create the new item
+    let item = {
         name: req.body.name,
-    });
+    };
 
     if (req.body.storePosition) {
         item.storePosition = req.body.storePosition;
@@ -27,9 +29,11 @@ router.post('/', [auth, position_converter], async (req, res) => {
         item.dateModified = Date.now()
     }
 
-    await item.save()
-        .then( (i) => res.send(i))
-        .catch( (err) => res.send(err));
+    //find the correct list to add the item to
+    List.findByIdAndUpdate(req.params.listid, { $push: {items: item} }, (err, list) => {
+        if (err) return res.status(404).send(err);
+        res.send(list);
+    });
 });
 
 router.get('/', [auth, auto_delete] ,async(req, res) => {

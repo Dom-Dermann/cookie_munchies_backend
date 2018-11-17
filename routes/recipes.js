@@ -7,7 +7,7 @@ router.post('/', auth, async (req, res) => {
     const result = recipeValidator(req.body);
     if(result.error) return res.send(result.error.details[0].message);
 
-     let recipe = new Recipe(req.body);
+    let recipe = new Recipe(req.body);
 
     await recipe.save()
         .then( (r) => res.send(r))

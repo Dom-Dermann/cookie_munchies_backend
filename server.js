@@ -21,15 +21,17 @@ mongoose.connect(config.get('db.host'))
     .catch((err) => {console.log(err)});
 
 // routes
-const items = require('./routes/items');
 const recipes = require('./routes/recipes');
 const users = require('./routes/users');
-const auth = require('./routes/auth')
+const auth = require('./routes/auth');
+const lists = require('./routes/lists');
+const items = require('./routes/items');
 
 // routing
-app.use('/api/items', items);
+app.use('/api/lists', lists);
 app.use('/api/recipes', recipes);
 app.use('/api/users', users);
 app.use('/api/auth', auth);
+app.use('/api/items', items);
 
 app.listen(port, () => { console.log('SERVER IS RUNNING.')});
