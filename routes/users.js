@@ -4,6 +4,7 @@ const router = express.Router();
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 const auth = require('../middleware/auth');
+const {List} = require('../models/list');
 
 router.get('/me', auth, async (req, res) => {
     const user = await User.findById(req.user._id).select('-password');
@@ -34,7 +35,27 @@ router.post('/', async(req, res) => {
     // sign and send token as part of the header
     // there is no email checking here for now. Once the user registers they get a valid jwt token and can keep browsing
     const token = user.generateAuthToken();
+
+    // create a new shopping list that lists the new user as owner
+    const newList = new List({
+        owner: user,
+        users: [],
+        items: []
+    });
+
+    await newList.save()
+        .then( (l) => {
+            // once the new list is saved, the list _id is added to the user object that own the list for later reference
+            user.ownsList = l._id;
+            user.save();
+        })
+        .catch( (e) => res.status(400).send(e));
+
     res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
 });
+
+router.get('/', auth, async (req, res)=> {
+    res.send(await User.find());
+})
 
 module.exports = router;

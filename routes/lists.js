@@ -1,25 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const List = require('../models/list');
+const {List, validateList} = require('../models/list');
 const auth = require('../middleware/auth');
+const _ = require('lodash');
 
 router.get('/:id', auth, async (req, res) => {
     List.findById(req.params.id)
-        .then( (l) => res.status(200).send(l))
+        .then( (l) => {
+            const response = _.omit(l, ['owner.password']);
+            res.status(200).send(response);
+        })
         .catch( (e) => res.status(400));
 });
 
-router.post('/', auth, async (req, res) => {
-    console.log('post started')
+router.post('/items', auth, async (req, res) => {
+    // post new items to list
+});
 
-    const newList = new List({
-        users: [req.user],
-        items: []
-    });
-
-    await newList.save()
-        .then( (l) => res.status(200).send(l))
-        .catch( (e) => res.status(400).send(e));
+router.post('/users', auth, async (req, res) => {
+    // post new users to list
 });
 
 module.exports = router;

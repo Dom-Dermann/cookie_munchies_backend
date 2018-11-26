@@ -5,7 +5,7 @@ const _ = require('lodash');
 const position_converter = require('../middleware/position_converter');
 const auto_delete = require('../middleware/auto_delete');
 const auth = require('../middleware/auth');
-const List = require('../models/list');
+const {List} = require('../models/list');
 
 router.post('/:listid', [auth, position_converter], async (req, res) => {
     // validate req body
