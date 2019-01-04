@@ -49,16 +49,20 @@ router.get('/', [auth, auto_delete] ,async(req, res) => {
         .catch( (err) => res.send(err));
 });
 
-router.put('/:id', [auth, position_converter], (req, res) => {
+router.put('/:listid/:itemid', [auth, position_converter], (req, res) => {
 
     let item = req.body;
     item.dateModified = Date.now()
 
-    Item.findByIdAndUpdate(req.params.id, {$set: item}, (err, i) => {
-        if (err) return res.send(err);
-        res.send(i);
-    })
-})
+    List.findByIdAndUpdate( req.params.listid, { $pull: { "items" : { "_id" : new mongoose.Types.ObjectId(req.params.itemid)}}}, (err, doc, resp) => {
+        if (err) return res.status(404).send(err)
+    });
+
+    List.findByIdAndUpdate( req.params.listid, { $push: {items: item} }, (err, list) => {
+        if (err) return res.status(404).send('mongoose err:' + err);
+        res.send(list);
+    });    
+});
 
 router.delete('/:listid/:itemid', auth, async(req, res) => {
     List.findByIdAndUpdate( req.params.listid, { $pull: { "items" : { "_id" : new mongoose.Types.ObjectId(req.params.itemid)}}}, (err, doc, resp) => {
