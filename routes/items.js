@@ -42,12 +42,29 @@ router.post('/:listid', [auth, position_converter], async (req, res) => {
     });
 });
 
-router.get('/', [auth, auto_delete] ,async(req, res) => {
-    Item.find()
-        .sort({storePosition: 1})
-        .then( (i) => res.send(i))
-        .catch( (err) => res.send(err));
-});
+
+// get one specific item - for editing
+router.get('/:itemid', [auth], async(req, res) => {
+    const itemid = new mongoose.Types.ObjectId(req.params.itemid);
+
+    List.findOne({
+        'items._id' : itemid 
+    })
+    .then( (list) => {
+        console.log(list.items);
+        const item = _.find(list.items, function(i) {
+            return i._id == req.params.itemid;
+        });
+        console.log(item);
+
+        res.send(item)
+    })
+    .catch( (err) => {
+        if (err) return res.status(404).send(err);
+    });
+
+    
+})
 
 router.put('/:listid/:itemid', [auth, position_converter], (req, res) => {
 
