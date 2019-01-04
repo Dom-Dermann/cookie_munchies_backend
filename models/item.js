@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
+Joi.ObjectId = require('joi-objectid')(Joi);
 
 const itemSchema = new mongoose.Schema({
     name : {
@@ -26,6 +27,9 @@ const itemSchema = new mongoose.Schema({
     dateModified: {
         type: Date, 
         required: false
+    }, 
+    addedBy: {
+        type: String,
     }
 });
 
@@ -33,8 +37,9 @@ function validate(body) {
     const schema = {
         name: Joi.string().required(),
         isDone: Joi.boolean(),
-        storePosition: Joi.number()
-    }
+        storePosition: Joi.number(), 
+        addedBy: Joi.string().max(255)
+    };
 
     return Joi.validate(body, schema);
 }

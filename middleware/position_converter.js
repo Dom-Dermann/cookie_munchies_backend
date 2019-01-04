@@ -11,7 +11,8 @@ const pos_converter = function (req, res, next) {
         _id: Joi.allow(),
         dateStarted: Joi.allow(),
         __v: Joi.allow(),
-        dateModified: Joi.allow()   
+        dateModified: Joi.allow(),
+        addedBy: Joi.allow()
     }
 
     const result = Joi.validate(req.body, schema)
