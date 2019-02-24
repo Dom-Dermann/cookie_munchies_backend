@@ -4,6 +4,7 @@ const router = express.Router();
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 const auth = require('../middleware/auth');
+const admin = require('../middleware/admin.js');
 const {List} = require('../models/list');
 const mongoose = require('mongoose');
 
@@ -66,6 +67,27 @@ router.post('/', async(req, res) => {
         .catch( (e) => res.status(400).send(e));
 
     res.header('x-auth-token', token).send(_.pick(user, ['_id', 'first_name', 'last_name', 'email']));
+});
+
+// change user's password
+router.put('/change/:user_email', auth, admin, async(req, res) => {
+    // validate password complexity
+    const passwordValidationResult = validatePassword(req.body.password);
+    if (passwordValidationResult.error) return res.status(400).send('Password must be between 5 and 30 characters, one lowercase, one uppercase and one symbol.');
+
+    // hash the password
+    const salt = await bcrypt.genSalt(10);
+    const user_password = await bcrypt.hash(req.body.password, salt);
+
+    //get the user and update his password
+    await User.findOneAndUpdate( { email: req.params.user_email },
+        { $set:
+            { password: user_password }
+        }, {new: true, upset: true},
+        (err, doc, resp) => {
+            if (err) res.status(404).send('User not found');
+            res.send(doc + ':' + resp)
+        });
 });
 
 

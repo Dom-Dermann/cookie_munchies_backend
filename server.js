@@ -34,4 +34,4 @@ app.use('/api/users', users);
 app.use('/api/auth', auth);
 app.use('/api/items', items);
 
-app.listen(port, () => { console.log('SERVER IS RUNNING.')});
+app.listen(port, () => { console.log(`SERVER IS RUNNING on port ${port}.`)});
