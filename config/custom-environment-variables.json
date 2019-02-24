@@ -1,3 +1,4 @@
 {
-    "jwtPrivateKey": "cookie_jwtPrivateKey"
+    "jwtPrivateKey": "cookie_jwtPrivateKey",
+    "mongoDB": "mongo"
 }

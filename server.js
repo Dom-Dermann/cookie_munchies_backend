@@ -7,8 +7,13 @@ const config = require('config');
 const port = process.env.PORT || 3223;
 
 if(!config.get('jwtPrivateKey')) {
-    console.log('FATAL ERROR: jwtPrivateKey is not defined.');
+    console.log('FATAL ERROR: cookie_jwtPrivateKey is not defined.');
     process.exit(1);
+}
+
+if(!config.get('mongoDB')) {
+    console.log('FATAL ERROR: mongo is not defined.');
+    process.exit(2);
 }
 
 // MW
@@ -16,7 +21,7 @@ app.use(express.json());
 app.use(cors());
 
 // connect to mongodb
-mongoose.connect(config.get('db.host'))
+mongoose.connect(config.get('mongoDB'))
     .then(()=> {console.log(`Connected to MongoDB on at ${config.get('db.host')}.`)})
     .catch((err) => {console.log(err)});
 
