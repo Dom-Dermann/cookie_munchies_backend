@@ -13,33 +13,49 @@ router.post('/:listid', [auth, position_converter], async (req, res) => {
     const result = validate(req.body);
     if (result.error) return res.send('Joi error:' + result.error.details[0].message);
 
-    // create the new item
-    let item = {
-        name: req.body.name,
-    };
+    async function post_to_List(item_name) {
+        // create the new item
+        let item = {
+            name: item_name,
+        };
 
-    if (req.body.storePosition) {
-        item.storePosition = req.body.storePosition;
+        if (req.body.storePosition) {
+            item.storePosition = req.body.storePosition;
+        }
+
+        if (req.body.addedBy) {
+            item.addedBy = req.body.addedBy;
+        }
+
+        if (req.body.isDone) {
+            item.isDone = req.body.isDone;
+        }
+
+        if (req.body.dateModified) {
+            item.dateModified = Date.now()
+        }
+
+        // find the correct list to add the item to
+        List.findByIdAndUpdate(req.params.listid, { $push: {items: item} }, (err, list) => {
+            if (err) return res.status(404).send('mongoose err:' + err);
+            console.log(list)
+        });
     }
 
-    if (req.body.addedBy) {
-        item.addedBy = req.body.addedBy;
+    const comma_position = req.body.name.indexOf(",")
+    if (comma_position != -1) {
+        let listOfItems;
+        listOfItems = req.body.name.split(',')
+        console.log(listOfItems);
+        //find the correct list to add each of the items to
+        for (const element of listOfItems) {
+            post_to_List(element)
+        };
+        res.status(200).send('Done creating multiple items.')
+    } else {
+        post_to_List(req.body.name)
+        res.status(200).send('Done creating one item.')
     }
-
-    if (req.body.isDone) {
-        item.isDone = req.body.isDone;
-    }
-
-    if (req.body.dateModified) {
-        item.dateModified = Date.now()
-    }
-
-    console.log(item);
-    //find the correct list to add the item to
-    List.findByIdAndUpdate(req.params.listid, { $push: {items: item} }, (err, list) => {
-        if (err) return res.status(404).send('mongoose err:' + err);
-        res.send(list);
-    });
 });
 
 
